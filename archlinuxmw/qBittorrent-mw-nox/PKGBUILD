@@ -1,0 +1,36 @@
+# Maintainer: Mineralwater Xu <mineralwater@m1neralwater.com>
+
+_pkgname=qbittorrent
+pkgname=$_pkgname-mw-nox
+pkgver=4.3.3
+pkgrel=2
+arch=('x86_64')
+url="https://www.qbittorrent.org"
+license=('custom' 'GPL')
+depends=('libtorrent-rasterbar-mw' 'qt5-base')
+makedepends=('boost' 'qt5-tools' 'qt5-svg')
+optdepends=('python: needed for torrent search tab')
+source=("https://downloads.sourceforge.net/sourceforge/qbittorrent/$_pkgname-${pkgver}.tar.xz")
+sha512sums=('6b92ecdc06fa47989d5f8f442ba21f1c848c8f14073d2c85e649a3c4f507f7abe663dd0f8cbc6ea5fff85432fc1ebb7b254b2dac6e991235ac22f94268f6a5dd')
+
+build() {
+  cd $_pkgname-${pkgver}
+
+  # tell qmake not to break makepkg's debug/!strip options
+  export QBT_ADD_CONFIG='nostrip'
+
+  # Build nox variant
+  mkdir -p "$_pkgname-nox"
+  pushd "$_pkgname-nox"
+  ../configure --prefix=/usr --disable-gui --enable-systemd
+  make
+}
+
+package() {
+  pkgdesc="An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar, w/o gui"
+
+  cd $_pkgname-${pkgver}/$_pkgname-nox
+
+  make INSTALL_ROOT="${pkgdir}" install
+  install -Dm644 "${srcdir}"/$_pkgname-${pkgver}/COPYING "${pkgdir}"/usr/share/licenses/$_pkgname-nox/COPYING
+}
