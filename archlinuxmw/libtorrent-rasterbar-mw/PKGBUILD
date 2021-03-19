@@ -1,0 +1,49 @@
+# Maintainer: Mineralwater Xu <mineralwater@m1neralwater.com>
+
+_pkgname=libtorrent-rasterbar
+pkgname=$_pkgname-mw
+pkgver=1.2.12
+pkgrel=2
+pkgdesc="A C++ BitTorrent library that aims to be a good alternative to all the other implementations around"
+arch=('x86_64')
+url="https://www.rasterbar.com/products/libtorrent/"
+license=('BSD')
+depends=('boost-libs' 'openssl')
+makedepends=('git' 'boost' 'cmake' 'python' 'python-setuptools')
+options=('!emptydirs')
+source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz
+        $_pkgname-cxx14-fix.patch::https://github.com/arvidn/libtorrent/pull/5026.patch)
+sha512sums=('09a79fa182f575368895479bebd936d7a44b3d1a242b83dfffe7be3c6ba5a63d47823634db06a1c2806506aad520cc8b1e75380ed9de65fdf5634c67eeebd65f'
+            'a3126164ec35260f3d388471adee08e19e4e39d189c7bdaba1634f6b86ce13a3b41c9a1f3a2c9a012a03f968942257bc3226983b5260687fbbff80ab324eddfe')
+
+prepare() {
+  cd $_pkgname-$pkgver
+  # https://bugs.archlinux.org/task/67754
+  patch -p1 -i ../$_pkgname-cxx14-fix.patch
+
+  # Avoid depending on newer processors
+  sed -i 's/-msse4.2//' configure.ac
+
+  autoreconf -if
+}
+
+build() {
+  cd $_pkgname-$pkgver
+
+  cmake \
+    -B "_build" \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
+    -DCMAKE_INSTALL_LIBDIR="lib" \
+    -Dpython-bindings=ON \
+    -Dboost-python-module-name="python" \
+    ./
+  make -C "_build"
+}
+
+package() {
+  cd $_pkgname-$pkgver
+
+  make -C "_build" DESTDIR="$pkgdir" install
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/$_pkgname/LICENSE"
+}
