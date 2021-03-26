@@ -4,7 +4,7 @@ Here are package sources, which I maintain, co-maintain or host.
 
 ## Package Repository
 
-To use my package repository, add [my GPG key](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0a979d95548d549c) to your pacman keyring:
+To use my package repository, add [my PGP Key](https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0a979d95548d549c) to your pacman keyring:
 
 ```sh
 pacman-key --recv-keys 0A979D95548D549C
