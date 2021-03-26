@@ -1,4 +1,4 @@
-# Arch Linux MineralwaterXu Repository
+# Arch Linux Mineralwater Xu Repository
 
 Here are package sources, which I maintain, co-maintain or host.
 
