@@ -9,21 +9,19 @@ arch=('x86_64')
 url="https://www.rasterbar.com/products/libtorrent/"
 license=('BSD')
 depends=('boost-libs' 'openssl')
-makedepends=('git' 'boost' 'cmake' 'python' 'python-setuptools')
+makedepends=('boost' 'cmake' 'python' 'python-setuptools')
 options=('!emptydirs')
 source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz)
 sha512sums=('29af34109f8bab91be03cd86a82ef592a9d1ae1a99ef4e6468985ac8968c67f80996bc0ac3fe2478ee20627df52e44128ff28fe81e928f31148b8c7066d67ccb')
 
-#prepare() {
-#  cd $_pkgname-$pkgver
-#  # https://bugs.archlinux.org/task/67754
-#  patch -p1 -i ../$_pkgname-cxx14-fix.patch
-#
-#  # Avoid depending on newer processors
-#  sed -i 's/-msse4.2//' configure.ac
-#
-#  autoreconf -if
-#}
+prepare() {
+  cd $_pkgname-$pkgver
+
+  # Avoid depending on newer processors
+  sed -i 's/-msse4.2//' configure.ac
+
+  autoreconf -if
+}
 
 build() {
   cd $_pkgname-$pkgver
