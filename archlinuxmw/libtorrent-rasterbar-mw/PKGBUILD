@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://www.rasterbar.com/products/libtorrent/"
 license=('BSD')
 depends=('boost-libs' 'openssl')
-makedepends=('boost' 'cmake' 'python' 'python-setuptools')
+makedepends=('boost' 'python' 'python-setuptools')
 options=('!emptydirs')
 source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz)
 sha512sums=('29af34109f8bab91be03cd86a82ef592a9d1ae1a99ef4e6468985ac8968c67f80996bc0ac3fe2478ee20627df52e44128ff28fe81e928f31148b8c7066d67ccb')
@@ -25,21 +25,20 @@ prepare() {
 
 build() {
   cd $_pkgname-$pkgver
-
-  cmake \
-    -B "_build" \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DCMAKE_INSTALL_PREFIX="/usr" \
-    -DCMAKE_INSTALL_LIBDIR="lib" \
-    -Dpython-bindings=ON \
-    -Dboost-python-module-name="python" \
-    ./
-  make -C "_build"
+  ./configure \
+    --prefix=/usr \
+    --enable-python-binding \
+    --enable-examples \
+    --disable-static \
+    --with-libiconv \
+    --with-boost-python=boost_python3
 }
 
 package() {
   cd $_pkgname-$pkgver
-
-  make -C "_build" DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir" install
   install -Dm644 COPYING "$pkgdir/usr/share/licenses/$_pkgname/LICENSE"
+
+  # Remove most example binaries
+  rm "$pkgdir"/usr/bin/{*_test,*_tester,simple_client,stats_counters}
 }
