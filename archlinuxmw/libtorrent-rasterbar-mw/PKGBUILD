@@ -3,11 +3,11 @@
 _pkgname=libtorrent-rasterbar
 pkgname=$_pkgname-mw
 pkgver=1.2.14
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="A C++ BitTorrent library that aims to be a good alternative to all the other implementations around"
-arch=('x86_64')
 url="https://www.rasterbar.com/products/libtorrent/"
+arch=('x86_64')
 license=('BSD')
 depends=('boost-libs' 'openssl')
 makedepends=('boost' 'cmake' 'ninja' 'python-setuptools')
