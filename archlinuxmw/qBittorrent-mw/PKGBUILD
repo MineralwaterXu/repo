@@ -3,7 +3,7 @@
 pkgbase=qbittorrent-mw
 pkgname=('qbittorrent-mw' 'qbittorrent-mw-nox')
 pkgver=4.3.9
-pkgrel=3
+pkgrel=4
 arch=('x86_64')
 url="https://www.qbittorrent.org"
 license=('custom' 'GPL')
