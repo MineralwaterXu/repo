@@ -2,14 +2,14 @@
 
 pkgname=st-mw-git
 pkgver=0.8.4.r5.119ab88
-pkgrel=2
+pkgrel=1
 pkgdesc="MineralwaterXu's build of simple terminal implementation for X"
 url="https://github.com/MineralwaterXu/st"
 arch=('x86_64')
 license=('MIT')
 depends=('libx11' 'libxft')
 makedepends=('git')
-source=("st::git+https://github.com/MineralwaterXu/st.git")
+source=("st::git+https://github.com/MineralwaterXu/st.git#branch=master")
 sha256sums=('SKIP')
 
 pkgver() {
