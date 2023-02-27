@@ -2,8 +2,8 @@
 
 _pkgname=libtorrent-rasterbar
 pkgname=$_pkgname-mw
-pkgver=1.2.15
-pkgrel=6
+pkgver=2.0.5
+pkgrel=1
 epoch=1
 pkgdesc="A C++ BitTorrent library that aims to be a good alternative to all the other implementations around"
 url="https://www.rasterbar.com/products/libtorrent/"
@@ -14,11 +14,15 @@ makedepends=('boost' 'cmake' 'ninja' 'python-setuptools')
 options=('!emptydirs')
 provides=('libtorrent-rasterbar')
 conflicts=('libtorrent-rasterbar')
-source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz)
-sha512sums=('c409c53ec9c299a05b51ab61d7df1209803cbd6070f0a014dd6fb42c30f6f5230ea90848330f901c61816bc70901e618409acacc95bb0e5acb7f81211d001fa2')
+source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz
+        https://github.com/arvidn/libtorrent/commit/71d608fc.patch)
+sha512sums=('be5b812135dada957e565085b5bdda06827c8427f78a4468ef263e1a1e33d3a0bbba7ac27235f0d17ae6087d54311281e3b1975eef81cda514acc8329862dc04'
+            '8edb98bff405ff9f982082e1070ad715338bf8cce71fbd82330c6e66f51daacc6e4d182b31c5e68d155358f12f321606b0af66c2e81b2ef546dc87c540dc9625')
 
 prepare() {
   mkdir -p build
+  cd $_pkgname-$pkgver
+  patch -p1 -i ../71d608fc.patch # Fix build with boost 1.78
 }
 
 build() {
