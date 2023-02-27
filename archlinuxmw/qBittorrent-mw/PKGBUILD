@@ -2,7 +2,7 @@
 
 pkgbase=qbittorrent-mw
 pkgname=('qbittorrent-mw' 'qbittorrent-mw-nox')
-pkgver=4.4.3
+pkgver=4.4.3.1
 pkgrel=1
 arch=('x86_64')
 url='https://www.qbittorrent.org'
@@ -12,13 +12,16 @@ makedepends=('cmake' 'boost' 'qt6-tools' 'qt6-svg')
 optdepends=('python: needed for torrent search tab')
 provides=('qbittorrent')
 conflicts=('qbittorrent')
-source=("https://downloads.sourceforge.net/sourceforge/qbittorrent/qbittorrent-${pkgver}.tar.xz"{,.asc})
-sha512sums=('f88dc36a03da7728b48aa08957cc06524752243ac0ae7bc7445c2b06ecd886e3c9d834756ca44e57bdee0fc661ee9b018c3720a8ee6921e708fcc77f69882daa'
-            'SKIP')
+source=("https://downloads.sourceforge.net/sourceforge/qbittorrent/qbittorrent-${pkgver}.tar.xz"{,.asc}
+        "https://github.com/qbittorrent/qBittorrent/commit/73bce485.patch")
+sha512sums=('d6d689728d9bc1e6422f0ba8d75a5482508327e446bc383d4412f78dbee1dc35e9da9cf2668aa72ee52e6a5d60b10f7a29df20b6f0da5ea1d908d52768cd8612'
+            'SKIP'
+            '45332666a2261898c8ced79285127c99ec3b3baa35527da2635a9d93f69d4638a215fe664b4fc0b827f5cf7835767bd33406ae3ded3a19d12e6cf6069316b29b')
 validpgpkeys=('D8F3DA77AAC6741053599C136E4A2D025B7CC9A2') # sledgehammer999 <sledgehammer999@qbittorrent.org>
 
 prepare() {
   cd qbittorrent-${pkgver}
+  patch -d $pkgbase-$pkgver -p1 < 73bce485.patch # Fix retrieving RSS feeds
 }
 
 build() {
