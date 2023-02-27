@@ -2,7 +2,7 @@
 
 pkgbase=qbittorrent-mw
 pkgname=('qbittorrent-mw' 'qbittorrent-mw-nox')
-pkgver=4.4.2
+pkgver=4.4.3
 pkgrel=1
 arch=('x86_64')
 url='https://www.qbittorrent.org'
@@ -13,7 +13,7 @@ optdepends=('python: needed for torrent search tab')
 provides=('qbittorrent')
 conflicts=('qbittorrent')
 source=("https://downloads.sourceforge.net/sourceforge/qbittorrent/qbittorrent-${pkgver}.tar.xz"{,.asc})
-sha512sums=('7f38f9d00535486e68cd0f7f46d0ca8855c8703f946ed144ebf9fbe7e9acdeb789228d0ebe0b8a5ec0d304d1efecfa59499eadff83d0cbd944ecb10b7206d79b'
+sha512sums=('f88dc36a03da7728b48aa08957cc06524752243ac0ae7bc7445c2b06ecd886e3c9d834756ca44e57bdee0fc661ee9b018c3720a8ee6921e708fcc77f69882daa'
             'SKIP')
 validpgpkeys=('D8F3DA77AAC6741053599C136E4A2D025B7CC9A2') # sledgehammer999 <sledgehammer999@qbittorrent.org>
 
