@@ -2,20 +2,20 @@
 
 pkgbase=qbittorrent-mw
 pkgname=('qbittorrent-mw' 'qbittorrent-mw-nox')
-pkgver=4.3.9
-pkgrel=7
+pkgver=4.4.0
+pkgrel=1
 arch=('x86_64')
-url="https://www.qbittorrent.org"
+url='https://www.qbittorrent.org'
 license=('custom' 'GPL')
-depends=('libtorrent-rasterbar-mw' 'qt5-base')
-makedepends=('boost' 'qt5-tools' 'qt5-svg')
+depends=('libtorrent-rasterbar-mw' 'qt6-base')
+makedepends=('cmake' 'boost' 'qt6-tools' 'qt6-svg')
 optdepends=('python: needed for torrent search tab')
 provides=('qbittorrent')
 conflicts=('qbittorrent')
 source=("https://downloads.sourceforge.net/sourceforge/qbittorrent/qbittorrent-${pkgver}.tar.xz"{,.asc})
-sha512sums=('19cff24f08306eda77d944f0388ffb192a6650089925a71142bd68c854f9493846008b02b155dedab0192eb975fdeeaba762d210478d5179f6ab7ba6aabe6a64'
+sha512sums=('92c219969f6f44056579da24fd37dd40969d0b98e14aa29b5f32d2b9c1c7bba1095ba7d40c6d90ca66dd7e65a50f1d63ab1f1360e8b2f9cb64c8e914967cba08'
             'SKIP')
-b2sums=('1f0427bb5cf31237577e8bfa3270c33797b4e1239a69cf943ea829d6a414f738e8404cdbfa2bbd08734c496f11b9adea811799fe7e6824d7d007e6beb69b62a4'
+b2sums=('56ed77fba20ec1c3bcd4848ed73190a60504316695ea1f2248ebaf4e9faf03b76c2124adf5a3e99e48a217519befb117f8b463d125f106dc011423c761e4582f'
         'SKIP')
 validpgpkeys=('D8F3DA77AAC6741053599C136E4A2D025B7CC9A2') # sledgehammer999 <sledgehammer999@qbittorrent.org>
 
@@ -24,34 +24,27 @@ prepare() {
 }
 
 build() {
-  cd qbittorrent-${pkgver}
+  cmake -B build -S qbittorrent-$pkgver \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DQT6=ON
+  cmake --build build
 
-  # tell qmake not to break makepkg's debug/!strip options
-  export QBT_ADD_CONFIG='nostrip'
-
-  mkdir -p qbittorrent
-  pushd qbittorrent
-  ../configure --prefix=/usr
-  make
-  popd
-
-  # Build nox variant
-  mkdir -p "qbittorrent-nox"
-  pushd "qbittorrent-nox"
-  ../configure --prefix=/usr --disable-gui --enable-systemd
-  make
+  cmake -B build-nox -S qbittorrent-$pkgver \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DQT6=ON \
+    -DGUI=OFF \
+    -DSYSTEMD=ON
+  cmake --build build-nox
 }
 
 package_qbittorrent-mw() {
   pkgdesc="An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar."
-  depends+=('qt5-svg' 'hicolor-icon-theme')
+  depends+=('qt6-svg' 'hicolor-icon-theme')
   provides=('qbittorrent')
   conflicts=('qbittorrent')
 
-  cd qbittorrent-${pkgver}/qbittorrent
-
-  make INSTALL_ROOT="${pkgdir}" install
-  install -Dm644 "${srcdir}"/qbittorrent-${pkgver}/COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/COPYING
+  DESTDIR="${pkgdir}" cmake --install build
+  install -Dm644 qbittorrent-${pkgver}/COPYING -t "${pkgdir}"/usr/share/licenses/${pkgname}
 }
 
 package_qbittorrent-mw-nox() {
@@ -59,8 +52,6 @@ package_qbittorrent-mw-nox() {
   provides=('qbittorrent-nox')
   conflicts=('qbittorrent-nox')
 
-  cd qbittorrent-${pkgver}/qbittorrent-nox
-
-  make INSTALL_ROOT="${pkgdir}" install
-  install -Dm644 "${srcdir}"/qbittorrent-${pkgver}/COPYING "${pkgdir}"/usr/share/licenses/${pkgname}/COPYING
+  DESTDIR="${pkgdir}" cmake --install build-nox
+  install -Dm644 qbittorrent-${pkgver}/COPYING -t "${pkgdir}"/usr/share/licenses/${pkgname}
 }
