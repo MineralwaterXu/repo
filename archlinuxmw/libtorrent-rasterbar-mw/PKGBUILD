@@ -2,7 +2,7 @@
 
 _pkgname=libtorrent-rasterbar
 pkgname=$_pkgname-mw
-pkgver=1.2.16
+pkgver=1.2.17
 pkgrel=1
 epoch=2
 pkgdesc="A C++ BitTorrent library that aims to be a good alternative to all the other implementations around"
@@ -15,7 +15,7 @@ options=('!emptydirs')
 provides=('libtorrent-rasterbar')
 conflicts=('libtorrent-rasterbar')
 source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz)
-sha512sums=('2bad1bf1604f99b85567056f798bfb78cdd663612291536d1145141e61f843aced416f7608911793c948d77802ef5b3088197b914c100a4278c94033eb304d4b')
+sha512sums=('d2c702d8d942fb1e49e803f0684336bead40c219bf68764e193c34d335de03f0dcfb94f46d41447a7d95ec7063f314f64da0c385f3d5df310539b231063f6c0f')
 
 build() {
   cd "$_pkgname-$pkgver"
