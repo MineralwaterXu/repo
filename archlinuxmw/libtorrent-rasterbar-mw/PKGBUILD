@@ -2,9 +2,9 @@
 
 _pkgname=libtorrent-rasterbar
 pkgname=$_pkgname-mw
-pkgver=2.0.7
+pkgver=1.2.16
 pkgrel=1
-epoch=1
+epoch=2
 pkgdesc="A C++ BitTorrent library that aims to be a good alternative to all the other implementations around"
 url="https://www.rasterbar.com/products/libtorrent/"
 arch=('x86_64')
@@ -15,26 +15,25 @@ options=('!emptydirs')
 provides=('libtorrent-rasterbar')
 conflicts=('libtorrent-rasterbar')
 source=(https://github.com/arvidn/libtorrent/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz)
-sha512sums=('30e558245a261ccf3f23815a037477ae6da1a02da0b7b3aa40383058c5782a341a11ae684f959efc1c9b39e31475ec31451b9ff4b2db3c0bfccc4d42bd6d69c1')
-
-prepare() {
-  mkdir -p build
-}
+sha512sums=('2bad1bf1604f99b85567056f798bfb78cdd663612291536d1145141e61f843aced416f7608911793c948d77802ef5b3088197b914c100a4278c94033eb304d4b')
 
 build() {
-  cd build
-  cmake -DCMAKE_BUILD_TYPE=Release \
+  cd "$_pkgname-$pkgver"
+
+  cmake \
+    -B "_build" \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX="/usr" \
     -DCMAKE_INSTALL_LIBDIR="lib" \
     -Dpython-bindings=ON \
     -Dboost-python-module-name="python" \
-    -Dpython-egg-info=ON \
-    -GNinja ../$_pkgname-$pkgver
-  ninja
+    ./
+  make -C "_build"
 }
 
 package() {
-  cd build
-  DESTDIR="$pkgdir" ninja install
-  install -Dm644 ../$_pkgname-$pkgver/COPYING -t "$pkgdir"/usr/share/licenses/$_pkgname/
+  cd "$_pkgname-$pkgver"
+
+  make -C "_build" DESTDIR="$pkgdir" install
+  install -Dm644 "LICENSE" -t "$pkgdir/usr/share/licenses/$_pkgname/"
 }
