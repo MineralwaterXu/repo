@@ -3,7 +3,7 @@
 _pkgname=libtorrent-rasterbar
 pkgname=$_pkgname-mw
 pkgver=1.2.19
-pkgrel=1
+pkgrel=2
 epoch=2
 pkgdesc="A C++ BitTorrent library that aims to be a good alternative to all the other implementations around"
 url="https://www.rasterbar.com/products/libtorrent/"
