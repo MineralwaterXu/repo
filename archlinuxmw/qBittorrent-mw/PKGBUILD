@@ -3,11 +3,11 @@
 pkgbase=qbittorrent-mw
 pkgname=('qbittorrent-mw' 'qbittorrent-mw-nox')
 pkgver=4.5.2
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 url='https://www.qbittorrent.org'
 license=('custom' 'GPL')
-depends=('libtorrent-rasterbar-mw' 'qt6-base')
+depends=('gcc-libs' 'glibc' 'libtorrent-rasterbar-mw' 'openssl' 'qt6-base' 'zlib')
 makedepends=('cmake' 'boost' 'qt6-tools' 'qt6-svg')
 optdepends=('python: needed for torrent search tab')
 provides=('qbittorrent')
