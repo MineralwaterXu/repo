@@ -1,7 +1,7 @@
 # Maintainer: Mineralwater Xu <mineralwater@m1neralwater.com>
 
 pkgname=dwm-mw-git
-pkgver=6.2.r18.4ad1022
+pkgver=6.2.r23.0ba0c37
 pkgrel=1
 pkgdesc="MineralwaterXu's build of dynamic window manager for X"
 url="https://github.com/MineralwaterXu/dwm"
