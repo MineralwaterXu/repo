@@ -1,7 +1,7 @@
 # Maintainer: Mineralwater Xu <mineralwater@m1neralwater.com>
 
 pkgname=st-mw-git
-pkgver=0.8.4.r5.119ab88
+pkgver=0.8.4.r6.caac826
 pkgrel=1
 pkgdesc="MineralwaterXu's build of simple terminal implementation for X"
 url="https://github.com/MineralwaterXu/st"
@@ -9,21 +9,31 @@ arch=('x86_64')
 license=('MIT')
 depends=('libx11' 'libxft')
 makedepends=('git')
-source=("st::git+https://github.com/MineralwaterXu/st.git#branch=master")
-sha256sums=('SKIP')
+source=("st::git+https://github.com/MineralwaterXu/st.git#branch=master"
+	terminfo.patch
+        README.terminfo.rst)
+sha256sums=('SKIP'
+	    'f9deea445a5c6203a0e8e699f3c3b55e27275f17fb408562c4dd5d649edeea23'
+        '95be3197f7de77a0fe2e4f527202e17e910ee24e1ed6bc39beb320a1304bb7e1')
+_sourcedir=st
 
 pkgver() {
 	cd st
 	echo "$(awk '/^VERSION =/ {print $3}' config.mk)".r"$(git rev-list --count HEAD)"."$(git rev-parse --short HEAD)"
 }
 
+prepare() {
+	patch -d "$_sourcedir" -p 0 < terminfo.patch
+}
+
 build() {
-	cd st
-	make 
+	make -C "$_sourcedir" X11INC=/usr/include/X11 X11LIB=/usr/lib/X11
 }
 
 package() {
-	cd st
-	make PREFIX=/usr DESTDIR="${pkgdir}" install
-	install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+	local shrdir="$pkgdir/usr/share"
+  make -C "$_sourcedir" PREFIX=/usr DESTDIR="$pkgdir" install
+  install -D -m 0644 -t "$shrdir/licenses/$pkgname" "$_sourcedir/LICENSE"
+  install -D -m 0644 -t "$shrdir/doc/$pkgname" "$_sourcedir/README.md" README.terminfo.rst
+  install -D -m 0644 -t "$shrdir/$pkgname" "$_sourcedir/st.info"
 }
